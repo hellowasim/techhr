@@ -184,14 +184,23 @@
     border:1px solid var(--hairline);
     cursor:zoom-in;
     background:#0d1120;
-    transform:scale(.86);
-    filter:blur(3px) saturate(.85) brightness(.72);
-    opacity:.4;
-    transition:transform 1s cubic-bezier(.16,.9,.25,1), filter 1s cubic-bezier(.16,.9,.25,1), opacity 1s ease;
-    will-change:transform, filter;
+    filter:blur(4px) saturate(.8) brightness(.68);
+    opacity:0;
+    transition:
+      transform 1.15s cubic-bezier(.22, 1.24, .3, 1),
+      filter 1.05s cubic-bezier(.16,.9,.24,1),
+      opacity .9s ease;
+    will-change:transform, filter, opacity;
   }
+
+  /* entrance origins — cycled per photo via data-dir */
+  .entry-figure[data-dir="left"]{ transform:translate(-13vw, 10px) rotate(-4deg) scale(.88); }
+  .entry-figure[data-dir="right"]{ transform:translate(13vw, 10px) rotate(4deg) scale(.88); }
+  .entry-figure[data-dir="diag-left"]{ transform:translate(-11vw, -9vh) rotate(-7deg) scale(.84); }
+  .entry-figure[data-dir="diag-right"]{ transform:translate(11vw, -9vh) rotate(7deg) scale(.84); }
+
   .entry-figure.in-focus{
-    transform:scale(1);
+    transform:translate(0,0) rotate(0deg) scale(1);
     filter:blur(0) saturate(1.04) brightness(1);
     opacity:1;
   }
@@ -340,14 +349,14 @@
   <div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
 
   <div class="masthead"><span class="dot"></span><b>TecHR</b>&nbsp;2026</div>
-  <div class="counter">Frame <b id="counterNum">00</b> / 30</div>
+  <div class="counter">Frame <b id="counterNum">00</b> / 19</div>
   <div class="hint">Scroll to relive &nbsp;·&nbsp; Click a photo to focus</div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-eyebrow">A People &amp; Culture Photo Journal</div>
     <h1>Tec<em>HR</em><br>2026</h1>
-    <div class="hero-sub">August 6 – 7 &nbsp;·&nbsp; <span>Two days, thirty moments</span></div>
+    <div class="hero-sub">August 6 – 7 &nbsp;·&nbsp; <span>Two days, nineteen moments</span></div>
     <div class="hero-frame"><img id="heroImg" src="" alt="TecHR 2026 opening frame" loading="eager"></div>
     <div class="scroll-cue"><div class="line"></div><span>Scroll</span></div>
   </section>
@@ -359,7 +368,7 @@
   <section class="closing">
     <div class="closing-eyebrow">End of Reel</div>
     <h2>Until the next gathering.</h2>
-    <p>Thirty frames from TecHR 2026 — captured, curated, and kept. Click any moment above to step back inside it.</p>
+    <p>Nineteen frames from TecHR 2026 — captured, curated, and kept. Click any moment above to step back inside it.</p>
     <div class="line"></div>
   </section>
 
@@ -371,44 +380,33 @@
       <img id="lbImg" src="" alt="">
     </div>
     <button class="lb-btn lb-next" id="lbNext">&#8250;</button>
-    <div class="lb-info"><div class="n" id="lbNum">01 / 30</div><div class="h">Scroll or pinch to zoom &nbsp;·&nbsp; Drag to pan &nbsp;·&nbsp; Esc to close</div></div>
+    <div class="lb-info"><div class="n" id="lbNum">01 / 19</div><div class="h">Scroll or pinch to zoom &nbsp;·&nbsp; Drag to pan &nbsp;·&nbsp; Esc to close</div></div>
   </div>
 
 <script>
 (function(){
 
-  // ---- source frames (TecHR 2026 album, max 30) ----
+  // ---- source frames (TecHR 2026 album) ----
   const ids = [
-    "AP1GczPmXy8L9eR1JlvG-00ic3Pxb3A1miRNCDE1iuFqUvveMzGXKEY3LRmp0uK6L2F0JKuMPah0Dok6Q_5jBTOqYhrVYiq0sKCkoeh8ywzUisuUikZRiKcA",
-    "AP1GczOM3Z3ec9lupjhRGz0EDW5OfiEp0FPZZ3QV0hs_2IG-umjWntfw4-VKupdWBDwaSMLXGPITAGeJavnV9XoVyZF5e_vf5R7Aa7aPFHlu91tGArBYUB4R",
-    "AP1GczPfwmPeVBJ3ljxomVewUlrdGcXnGBylYzJ54pi2CEQXzl2oU4Fe8LqNrpFhZAtFUjnRl_Q_do23zhN6Y6dhc9BViTVyY2d_LY5gGpnGLuMJt-4z73U4",
-    "AP1GczM2GlYwpb1bsehyMPnDHj9mn1MPJKuhxIuH7oNFbppPKaesuPDfSvx8zz_D91Ya0ZGZhRG3N0LUIoTigmg7IrB8UMT7rDt2BMwAtGVtRo4a8KKYiFSA",
-    "AP1GczNtEFe5bthtqnBirOAc73wxmEL_lsbL1Lvq1u8YdWq2HXLQ5TiCaDJ0ZD4KgQ4Cf54VFve92BD-BYJ62j9MoWvh1Nk9tLmTIudJzt-bPK6I_VhDXF5c",
-    "AP1GczPfOYj2Bpy3XyTh2IA_7u6Njid0eAy8mTE-PEwbHeZ_6UU2V7vojSbVHvKLZx7nIPp0bZ3PBPQdS8kYiV4iGDeX2-ApMQWS14u6-a7LxGeTEyrs1gxl",
-    "AP1GczMbdE2gnVOIFgvoofVyG_Oidb-zoCSna20YTV12ApqL5TMaT_FTrEejS42I_ctyuztfpNWWG2Ivg3IXu086ntQsGIkkkrYQ6RsqbC871im4xdDZco8n",
-    "AP1GczOVIWUPbifniZxKdDdkrgnQN27NqVCVTwkj_q9jBzUqRUgZ9g37YOgqCGYi40h8L3RA4COz8CkiR6CiP8AwdBfu2PQcazyqrFDED5hlEC1TMeeIDXcn",
-    "AP1GczM7WL8f-FikrDSgjkv6bqRRLrbgMhuoDNI7PgGpQo56DJJc2R6U2NvoZwco4foESazegYZ0M16_l5701QtYfoca17Pgj_Fv4zwVWLWKCX5Wy_5YzZQ6",
-    "AP1GczPInXsiZo6I3pbGCsZ96n01UXPtxc0akTQtPm-772nv8CqR61Z9tekuJQ5vRcaW9zEXEvg_alR9B-BEsTqN3Hp2cvtNEe-FTHzApIOgxi3zS2kaUYkM",
-    "AP1GczOlqUVx0Bcp75fcAJUc7Gk37N6EsqB4nyg5_Ir-aDXrvAlxARspW_Dye5MLcUTdcxZTMHxQc8JdptTkoBCfjXVh6kuDtmS0tKOBVRaUtjJzH7F8JyAR",
+    "AP1GczNyXfD_ea4cp0r4ZEmnpKBNh5ECzEknsQJYCFmvAwSQZ3T12r0RGHWifXwKXmsJZaDmT1ZQnT2CJwf3up0sf_YZi2W-gWcBJzmUw62fWlbFDjIWngYl",
+    "AP1GczMPdKlV0rGIZ174GUsehogse6XJiD0mIn7iORgnhuNT-ErGvz6CP5EYlyF_ft2V1Q8zj6uglVh54INHm39PAbNT8MjzwyZ6o-0xuSArDcaYRNNBFLdg",
+    "AP1GczOUR2ojoM3RoKEjhEgrU11F7TBr47FPcyUJd-wOSPtcmVoJBIOAxZtwr4ILTbVx2mlPQQGQm028oSudvYRsaXWJPkxViFpJLcjTKCQS51EQ6RLedWy5",
+    "AP1GczNqEHS_NmkhJ_nwUCE2vOIhfDaTf2fXw-KevzGtxVWt34jhb4vKfN94OII_0Z5KPjDvFwo2PvT6uawHGmdLb0NNaOoDN6i27QOE8whmyohLnoxalrXE",
+    "AP1GczOjJXww2vh49QIiefGiqSPAhTQKGcMbaUCdD-3O83Iv1O9Y3VfkRikK-1eoZiFKQcxG5Cn7xTg-Y89M5vBkY0n5PM-8NwtFQhs214VKCs43eYBB-OZV",
+    "AP1GczMAux6h1W1jnC2PEARaadxeCuDmqM2ZhPhcW_GlEV7EuiKw0toWKDBEmzbutLx0dQ2mqgzHSMvi9cb5AqZJPCWSg9nOfQe_JgtHKppDliPpTS8RkW9p",
+    "AP1GczMHs7V2i3k9AkuDBeU5ybe_ONtaWCFf39Am2tVpjiPh8S7JOueSZ4y93d4vE5CPAua4XzKelik79VKPGOXxdODnxnIyCU5b5CGLjVuR7ZkpV0tRneFp",
+    "AP1GczNArFWcsi00tv4ix8K-QRTyukf8wMvLPdAQGaUOmLNyJm3kKMvhubXZY4wUOVoKk7726lB6zRH9Xpc_Y9NLyba9nJYqwzBqRaZ6rpoBRj-HJ2FoDsel",
+    "AP1GczPJXr7oJzNZhPbXnRNof9SXwd6ssKMHwgRORsvLOeo4cSQv_wmvLN8V55BcmlOzqQahjBuYu8G0ty4dR7dYhSOnG43bA_CWQziVJFwTqOcrE6DiWTCB",
+    "AP1GczPNIp0DyTus2oFdcZ6Dj2z-nVFJ_mTNjBz8Oa1uQYZAP_onr3Esi7jLh0nA-N25HmkPWIsFDHYKh1bZ2yUM07GO2ZJxpR2Cx5HTEQtLRyNekQTJXuH1",
     "AP1GczPzFoDlx2ZpFEnKhR_c_znQ7lR6gxmVBoarbcZPTdNVVtTSUNP0KdJHPcwQYgw8jZyqGdhgL06-BR2WxvKmvWb-JBzuwsHceZ5ezox-IbnoVQeiYN0E",
-    "AP1GczN3Gnp0LgO7FgbG9vBT6BiIIcoK2i1u_C3qvYCL3U_RWD65Pw-Suj3ogTUF8qUhktDnt6xpn5j4ptCagH1gk9RPP7e9p2j61ilP_Uw0SQCODwALJS1k",
     "AP1GczMd7euQAgcFBThFu-ihrcQfF3SijCaHSiUFi4RXswgi_pFKeYkfqsTI5dJgpZQI9_iEqkJ-6x9Fs2Hw_WyRS0TgpTORN9-AF5Mvv9V0yoxnQtqsEljd",
-    "AP1GczN8UOAf51SEFwurfYAZFWl0oDNSpfXpi0y6ts-6WXX4otSAnVjSRBjOhEciy3Wv0iZ_7Nm9BFiFqRcFnR3idwWIJre2sgxbdeNqV0E7yYD_d6-lFw8f",
-    "AP1GczPLm5XSQOIMULIe29BgDR56DaJxtTgtXrzOIHUcBlEbrTC7a8uoLlp1vZx1dUhH-qAdZ4yIhZ9I4ORrkez0Gv-_ITshikKGeoxFV8Gq3uoyRurph61M",
-    "AP1GczObE3hSlN4PoRjUgQAv1hj4n9eHHfYLLqTzjixPcLv9E1HkEXQRF7P8mS-fJQaXAbZI9ZI-Kc5rF1xSIdXG3m8lyO8ZH-LG7WZOND8X6VO4syaTlWT8",
-    "AP1GczOFZodwAe1grJFg10G8POGFYXgzlu_JtSIZhiF1HSYYnHtDR8EyGJRnA_7Lme6rBp2VFPaKZZsma0maQV9spXKZUGCYNdUQDqKqPdlPTaV1w7evSCOL",
-    "AP1GczOT44RvT8gUVRVH2lDdFDpEqsjuj6MdiMBfy6ZH5fEyoLoOA_OvHc-e6zwSfOsuS7ZYybKYUqmkV21CRp6yeeDmogqRVt6Wwtl1SGkwf-iuUD16y9co",
-    "AP1GczOI2DqA6Sp7ItPluw0RtTv3Vi8m4TqEqzTukLpqXnJPO_OIioL2OXAqkpzTvXxOLt7P1vO1GCVhMjA2b4CGPErEhheFJT8-FsLX6cki4Y0eSziCgoKg",
-    "AP1GczMsTl__-c9ziyTjaoiJrcfBMt6Qk2W59XgUT1F7jl8tU-2lkk3uLgugZAjbYSudkjD4dn6P_SyNa2KB17IIsoekE7HrU8tCGU582J8MjV5eo0AOp5uu",
     "AP1GczOO65RRZgP4MYaP6KcuBe4vltLqHEGb5KBOmyvjNik4roQK8h-lwHpxFXZluMm9Z4tyaPfj84IHm6W5QoF8eplujWhrFcNaOmmlxdYbCZ-nNpVNteCF",
-    "AP1GczOPEgb0IBqLKsGe8XVzBLqimcyf6XY-9E8xNsqOw43Jq8Lwky_hemzIil9rEjmZtDCFalvogAZnjzuScZz-Sf6g1hdcjy9MOoY8TqenMm09q-9KVk8j",
-    "AP1GczOZ2TmoZUOuAvESDLrhnx59eeQfX0g9Axwx_lYms-8t1O__OEL7NmRdIr9skJfYT5buqJ1AKZRSOCi2S0gvBYEcNRjNmGvYqdD071o2GgXEZZiJ_yOW",
-    "AP1GczN4Rs8tSvCixyA4M9-EjSjg8tYcghvXWzVJr-eHv90nD16vfX3rijL9-pTMAfhCMxKSV0PF9b4CD18gpQubxPQP_fjAV95bHXeeLNRJgET5PbT7TUeD",
-    "AP1GczONNIeC-jxo7QxVD-IuGty8DtNtKsVSS-WDX2XC8AMSGh4_F6jWp2uZGRd5HD-73P4iG-ouCuWqcHaqsB8UkyuRgW64Fs8pYIHOoBtA1EG8v0m-hsgy",
-    "AP1GczNTfRBGNbaAyk3gKJuNgcpTwdayGI3FCdTTlVzB_s4U5iNzPmaZ1gHlPRPy-sJJzDdhpYChkB4lm5pgDI5ibHvYBv6G08x_73YcyZKj3a4rm4dUaLD2",
-    "AP1GczPHl0ZU1QC_DEnIr33XiUh-CW_MQKKC2F6Pl4EWtLwWtyaPP2qVxkFXEy3l4AJp4GNV_fCUXXey9sFY577i2CXtZl1mCDSotADJP5YxzUthmSxdjiKF",
-    "AP1GczONeKVKw3ex4ZZUCbmpqUUC0g0t6eIvpytYt0g_sxn1ikT-tFNLqJmMOpKhAXnWcNXhbky5YIYrxNGLS3N2lpMgACqvPz_j0JROR_GqD_qenu87OYlV",
-    "AP1GczPo_xbLHkAn5prG7jPjHd30jKEwjX9EYqo4U_3bM4Rfny1V6hs-8Fz6F8tVvA96DG1knd6YpKhrWbhopva676TbiKov75Gg7S9SgFPqOt2UNQE8qpdY"
+    "AP1GczPo_xbLHkAn5prG7jPjHd30jKEwjX9EYqo4U_3bM4Rfny1V6hs-8Fz6F8tVvA96DG1knd6YpKhrWbhopva676TbiKov75Gg7S9SgFPqOt2UNQE8qpdY",
+    "AP1GczNhyO_ZnF9vGQEw_PjQiJimaZcwwwXHCcj2egc7QDVqN8ohDiStMcd0r4z0FW62F-uMpPjnBIoJm-_-v1G1D1YcQUBMv0IPvmNpGLoVzbcl4TstE7LE",
+    "AP1GczN0EAG53StISoQ5aDmXheGMB33iDt_7fkhuCWdP4XuW2ECgKjjAQ3b9SecRt1eYlPwf7eElr1k2AUL7oSIyO6Am7fBlNdVP9tju9wQrAUcDkdEeHwfW",
+    "AP1GczPkk5wdZfS2vSyrxT3Q_ACEpMZtamkhP4GmSrxx56_quWld2SPbIfegWxo2QzZjUapPEECJWxvHHssCzazEb17c1MU97gYLo2coHB-u5iJTiq-8y0CC",
+    "AP1GczPfjOaMPCGPB9W2MWCgszZ7f_eHcHMpT2L8iOUyEsIlqSYmXqLJoWJ8gdImG0_rRLS-IgHpfzN8TOhYC_1nUP8u6beduDR9R7WBD-bYwyLlYOJ_brQn",
+    "AP1GczOz6Wbb4SXGtM2Q5hkr0HEs6zbqvgoq1PGFnxY5Prm5IuMjqTI8xukGFSSYAzuwEo3JqYayC_JK9VcqWoj1nul-2Anv-CDdTwhascMggTPVdBzzawVX"
   ];
 
   const base = id => `https://lh3.googleusercontent.com/pw/${id}`;
@@ -419,26 +417,28 @@
     "The Gathering","First Light","Open Floor","On Stage","Between Sessions",
     "The Room Listens","A Question Raised","Side Conversations","Coffee &amp; Candour","The Panel",
     "Notes &amp; Nods","Break of Day Two","Back to the Floor","Working Groups","A Shared Laugh",
-    "The Long Table","Late Morning","Ideas in the Open","Standing Room","Close Attention",
-    "Afternoon Light","The Huddle","Handshakes","Reflections","Wrapping Threads",
-    "Final Address","Group Frame","The Walk Out","Last Light","Curtain Call"
+    "The Long Table","Late Morning","Ideas in the Open","Standing Room"
   ];
 
   const journal = document.getElementById('journal');
   const frag = document.createDocumentFragment();
 
+  // cycle through four drop-in origins, shuffled so no two neighbours repeat obviously
+  const dirCycle = ["left","diag-right","right","diag-left"];
+
   ids.forEach((id, i) => {
     const n = i + 1;
+    const dir = dirCycle[i % dirCycle.length];
     const entry = document.createElement('div');
     entry.className = 'entry';
     entry.innerHTML = `
-      <div class="entry-figure" data-index="${i}">
+      <div class="entry-figure" data-index="${i}" data-dir="${dir}">
         <img src="${thumb(id)}" alt="TecHR 2026 — ${captions[i] || 'Moment ' + n}" loading="lazy">
         <div class="entry-corner tl"></div>
         <div class="entry-corner br"></div>
       </div>
       <div class="entry-meta">
-        <div class="entry-index"><small>Frame</small> ${String(n).padStart(2,'0')} / 30</div>
+        <div class="entry-index"><small>Frame</small> ${String(n).padStart(2,'0')} / 19</div>
         <div class="entry-title">${captions[i] || 'Moment ' + n}</div>
         <div class="entry-line"></div>
         <div class="entry-desc">TecHR 2026 &nbsp;·&nbsp; August 6&ndash;7. One frame from the floor, held here in focus.</div>
@@ -487,7 +487,7 @@
   function openLightbox(i){
     current = i;
     lbImg.src = full(ids[i]);
-    lbNum.textContent = `${String(i+1).padStart(2,'0')} / 30`;
+    lbNum.textContent = `${String(i+1).padStart(2,'0')} / 19`;
     resetZoom();
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
